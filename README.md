@@ -1,36 +1,96 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AI会話共有プラットフォーム
 
-## Getting Started
+AIとの会話を共有するためのプラットフォームです。ChatGPT、Gemini、Claudeなどとの会話内容を投稿し、他のユーザーと知識を共有できます。
 
-First, run the development server:
+## 機能
 
+- Google認証によるログイン
+- AIとの会話を投稿
+- 投稿の時系列表示
+- 誰でも閲覧可能なタイムライン
+
+## 技術スタック
+
+- **フロントエンド**: Next.js / React / TypeScript
+- **バックエンド**: Firebase (Firestore)
+- **認証**: Firebase Auth (Googleログイン)
+- **ホスティング**: Vercel
+
+## セットアップ方法
+
+### 前提条件
+
+- Node.js (v18以上)
+- npm または yarn
+- Firebaseプロジェクト
+
+### インストール手順
+
+1. リポジトリをクローン
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone <リポジトリURL>
+cd ai-thread-sharing
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. 依存関係をインストール
+```bash
+npm install
+# または
+yarn install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. 環境変数の設定
+`.env.local.example`ファイルを`.env.local`にコピーし、Firebaseの設定情報を入力します。
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+NEXT_PUBLIC_FIREBASE_API_KEY=
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=
+NEXT_PUBLIC_FIREBASE_APP_ID=
+```
 
-## Learn More
+4. 開発サーバーを起動
+```bash
+npm run dev
+# または
+yarn dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+5. ブラウザで `http://localhost:3000` にアクセス
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Firebaseの設定
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. [Firebase Console](https://console.firebase.google.com/)でプロジェクトを作成
+2. Authentication設定でGoogleログインを有効化
+3. Firestoreデータベースを作成
+4. プロジェクト設定からウェブアプリを追加し、設定情報を取得
 
-## Deploy on Vercel
+## デプロイ方法
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Vercelへのデプロイ
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. [Vercel](https://vercel.com/)にアカウント登録
+2. GitHubリポジトリと連携
+3. 環境変数を設定
+4. デプロイ
+
+## 今後の拡張予定
+
+- 議論を深める機能（リツイートのような派生投稿）
+- AIが投稿を認識し、ツリー構造で知識を拡張
+- 検索機能（カテゴリ・タグ整理）
+- いいね・コメント機能（SNS要素の追加）
+
+## ライセンス
+
+MIT
+
+## 貢献方法
+
+1. このリポジトリをフォーク
+2. 機能ブランチを作成 (`git checkout -b feature/amazing-feature`)
+3. 変更をコミット (`git commit -m 'Add some amazing feature'`)
+4. ブランチにプッシュ (`git push origin feature/amazing-feature`)
+5. プルリクエストを作成
