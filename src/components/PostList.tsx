@@ -10,6 +10,47 @@ interface Post {
   createdAt: Timestamp;
 }
 
+// URL検出用の正規表現
+const URL_REGEX = /(https?:\/\/[^\s]+)/g;
+
+// URLをリンクに変換する関数（修正版）
+const convertUrlsToLinks = (text: string) => {
+  // URLにマッチする部分とそれ以外の部分に分割
+  const parts = [];
+  let lastIndex = 0;
+  let match;
+  
+  // 正規表現で順番にマッチを探す
+  while ((match = URL_REGEX.exec(text)) !== null) {
+    // マッチの前のテキストを追加
+    if (match.index > lastIndex) {
+      parts.push(text.substring(lastIndex, match.index));
+    }
+    
+    // URLをリンクとして追加
+    parts.push(
+      <a 
+        key={match.index} 
+        href={match[0]} 
+        target="_blank" 
+        rel="noopener noreferrer" 
+        className="text-blue-600 hover:underline break-all"
+      >
+        {match[0]}
+      </a>
+    );
+    
+    lastIndex = match.index + match[0].length;
+  }
+  
+  // 残りのテキストを追加
+  if (lastIndex < text.length) {
+    parts.push(text.substring(lastIndex));
+  }
+  
+  return parts;
+};
+
 export default function PostList() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
@@ -74,7 +115,10 @@ export default function PostList() {
               </p>
             </div>
           </div>
-          <div className="whitespace-pre-wrap text-black font-normal">{post.content}</div>
+          {/* URLをリンクに変換して表示 */}
+          <div className="whitespace-pre-wrap text-black font-normal">
+            {convertUrlsToLinks(post.content)}
+          </div>
         </div>
       ))}
     </div>
