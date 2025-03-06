@@ -11,7 +11,7 @@ export default function Home() {
       <Header />
       
       <main className="flex-grow container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold text-center mb-8">AIとの会話を共有しよう</h1>
+        <h1 className="text-3xl font-bold text-center mb-8 text-black">AIとの会話を共有しよう</h1>
         
         <div className="max-w-3xl mx-auto">
           <PostForm />

@@ -54,14 +54,14 @@ export default function PostForm() {
   return (
     <form onSubmit={handleSubmit} className="bg-white p-4 rounded-lg shadow-md mb-6">
       <div className="mb-4">
-        <label htmlFor="content" className="block text-sm font-medium text-gray-700 mb-2">
+        <label htmlFor="content" className="block text-sm font-medium text-black mb-2">
           AIとの会話を共有
         </label>
         <textarea
           id="content"
           value={content}
           onChange={(e) => setContent(e.target.value)}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black font-normal"
           rows={6}
           placeholder="AIとの会話内容をここに貼り付けてください..."
           disabled={isSubmitting}

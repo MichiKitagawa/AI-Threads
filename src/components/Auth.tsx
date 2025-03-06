@@ -2,10 +2,12 @@ import { useState } from 'react';
 import { auth } from '../lib/firebase';
 import { GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import ProfileSettings from './ProfileSettings';
 
 export default function Auth() {
   const [user, loading, error] = useAuthState(auth);
   const [loginError, setLoginError] = useState<string | null>(null);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   const signInWithGoogle = async () => {
     try {
@@ -36,17 +38,27 @@ export default function Auth() {
 
   return (
     <div className="flex flex-col items-center p-4">
+      {/* デバッグ情報 */}
+      {user && (
+        <div className="hidden">
+          <p>User: {user.displayName}</p>
+          <p>Photo URL: {user.photoURL ? 'exists' : 'null'}</p>
+        </div>
+      )}
+      
       {user ? (
         <div className="flex flex-col items-center gap-2">
-          <div className="flex items-center gap-2">
-            {user.photoURL && (
-              <img 
-                src={user.photoURL} 
-                alt={user.displayName || 'ユーザー'} 
-                className="w-8 h-8 rounded-full"
-              />
-            )}
-            <span>{user.displayName || 'ユーザー'}</span>
+          <div 
+            className="flex items-center gap-2 cursor-pointer hover:bg-gray-100 p-2 rounded-full"
+            onClick={() => setIsProfileOpen(true)}
+          >
+            <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center overflow-hidden">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+            </div>
+            <span className="text-black font-medium">{user.displayName || 'ユーザー'}</span>
           </div>
           <button
             onClick={handleSignOut}
@@ -72,6 +84,11 @@ export default function Auth() {
           {loginError && <p className="text-red-500">{loginError}</p>}
         </div>
       )}
+
+      <ProfileSettings 
+        isOpen={isProfileOpen} 
+        onClose={() => setIsProfileOpen(false)} 
+      />
     </div>
   );
 } 

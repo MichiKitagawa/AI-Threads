@@ -60,25 +60,21 @@ export default function PostList() {
       {posts.map((post) => (
         <div key={post.id} className="bg-white p-4 rounded-lg shadow-md">
           <div className="flex items-center mb-3">
-            {post.userPhotoURL ? (
-              <img
-                src={post.userPhotoURL}
-                alt={post.userName}
-                className="w-10 h-10 rounded-full mr-3"
-              />
-            ) : (
-              <div className="w-10 h-10 rounded-full bg-gray-300 mr-3 flex items-center justify-center">
-                <span className="text-gray-600">{post.userName.charAt(0)}</span>
-              </div>
-            )}
+            {/* 人型SVGアイコンを強制的に表示 */}
+            <div className="w-10 h-10 rounded-full bg-gray-300 mr-3 flex items-center justify-center overflow-hidden">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+            </div>
             <div>
-              <h3 className="font-medium">{post.userName}</h3>
-              <p className="text-sm text-gray-500">
+              <h3 className="font-medium text-black">{post.userName}</h3>
+              <p className="text-sm text-gray-700">
                 {post.createdAt ? new Date(post.createdAt.toDate()).toLocaleString('ja-JP') : '日時不明'}
               </p>
             </div>
           </div>
-          <div className="whitespace-pre-wrap">{post.content}</div>
+          <div className="whitespace-pre-wrap text-black font-normal">{post.content}</div>
         </div>
       ))}
     </div>
