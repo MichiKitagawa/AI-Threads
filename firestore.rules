@@ -1,17 +1,33 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // 投稿は誰でも読み取り可能、作成は認証済みユーザーのみ
-    match /posts/{postId} {
-      allow read: if true;
-      allow create: if request.auth != null;
-      allow update, delete: if request.auth != null && request.auth.uid == resource.data.userId;
+    // 管理者かどうかをチェックする関数
+    function isAdmin() {
+      return request.auth != null && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
     }
     
-    // ユーザープロフィールは誰でも読み取り可能、更新は本人のみ
-    match /users/{userId} {
+    match /posts/{postId} {
+      // 誰でも読み取り可能
       allow read: if true;
-      allow write: if request.auth != null && request.auth.uid == userId;
+      
+      // 通常の投稿は認証済みユーザーのみ作成可能
+      allow create: if request.auth != null && 
+                    !request.resource.data.isPinned;
+      
+      // 自分の投稿のみ更新・削除可能（isPinnedフィールドは変更不可）
+      allow update, delete: if request.auth != null && 
+                             resource.data.userId == request.auth.uid &&
+                             (!request.resource.data.keys().hasAny(['isPinned']) || 
+                              resource.data.isPinned == request.resource.data.isPinned);
+      
+      // 管理者は全ての操作が可能
+      allow write: if isAdmin();
+    }
+    
+    // 管理者コレクションは読み取りのみ許可
+    match /admins/{userId} {
+      allow read: if request.auth != null;
+      allow write: if false; // コンソールからのみ変更可能
     }
   }
-} 
+}
