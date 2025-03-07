@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth, db } from '../../lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
@@ -85,7 +86,9 @@ export default function AdminPage() {
             <h2 className="text-xl font-bold mb-4 text-black">管理者メニュー</h2>
             <ul className="space-y-2">
               <li>
-                <a href="/" className="text-blue-600 hover:underline">ホームに戻る</a>
+                <Link href="/" className="text-blue-600 hover:underline">
+                  ホームに戻る
+                </Link>
               </li>
               {/* 他の管理機能へのリンクをここに追加 */}
             </ul>

@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
-import { auth, db } from '../lib/firebase';
+import { auth } from '../lib/firebase';
 import { updateProfile } from 'firebase/auth';
-import { doc, updateDoc } from 'firebase/firestore';
 
 interface ProfileSettingsProps {
   isOpen: boolean;

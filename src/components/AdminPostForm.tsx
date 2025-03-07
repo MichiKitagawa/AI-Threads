@@ -6,7 +6,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 export default function AdminPostForm() {
   const [user] = useAuthState(auth);
   const [content, setContent] = useState('');
-  const [isPinned, setIsPinned] = useState(true); // デフォルトで固定
+  const isPinned = true;
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
