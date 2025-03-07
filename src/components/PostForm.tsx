@@ -1,10 +1,13 @@
+'use client';
+
 import { useState } from 'react';
 import { auth, db } from '../lib/firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import { Auth } from 'firebase/auth';
 
 export default function PostForm() {
-  const [user] = useAuthState(auth);
+  const [user] = useAuthState(auth as Auth);
   const [content, setContent] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -19,6 +22,11 @@ export default function PostForm() {
     
     if (!content.trim()) {
       setError('投稿内容を入力してください');
+      return;
+    }
+    
+    if (!db) {
+      setError('データベース接続エラー');
       return;
     }
     

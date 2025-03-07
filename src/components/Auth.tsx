@@ -1,15 +1,22 @@
+'use client';
+
 import { useState } from 'react';
 import { auth } from '../lib/firebase';
-import { GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
+import { GoogleAuthProvider, signInWithPopup, signOut, Auth } from 'firebase/auth';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import ProfileSettings from './ProfileSettings';
 
 export default function Auth() {
-  const [user, loading, error] = useAuthState(auth);
+  const [user, loading, error] = useAuthState(auth as Auth);
   const [loginError, setLoginError] = useState<string | null>(null);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   const signInWithGoogle = async () => {
+    if (!auth) {
+      setLoginError('認証サービスが利用できません');
+      return;
+    }
+
     try {
       const provider = new GoogleAuthProvider();
       await signInWithPopup(auth, provider);
@@ -21,6 +28,8 @@ export default function Auth() {
   };
 
   const handleSignOut = async () => {
+    if (!auth) return;
+
     try {
       await signOut(auth);
     } catch (error) {

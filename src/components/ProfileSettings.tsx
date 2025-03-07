@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, useEffect } from 'react';
 import { auth } from '../lib/firebase';
 import { updateProfile } from 'firebase/auth';
@@ -13,7 +15,7 @@ export default function ProfileSettings({ isOpen, onClose }: ProfileSettingsProp
   const [message, setMessage] = useState<{ text: string; type: 'success' | 'error' } | null>(null);
 
   useEffect(() => {
-    if (isOpen && auth.currentUser) {
+    if (isOpen && auth?.currentUser) {
       setDisplayName(auth.currentUser.displayName || '');
     }
   }, [isOpen]);
@@ -21,7 +23,7 @@ export default function ProfileSettings({ isOpen, onClose }: ProfileSettingsProp
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!auth.currentUser) return;
+    if (!auth?.currentUser) return;
     
     setIsSubmitting(true);
     setMessage(null);
@@ -58,9 +60,11 @@ export default function ProfileSettings({ isOpen, onClose }: ProfileSettingsProp
   if (!isOpen) return null;
 
   // デバッグ情報
-  console.log('Current user:', auth.currentUser);
-  console.log('Photo URL:', auth.currentUser?.photoURL);
-  console.log('Display Name:', auth.currentUser?.displayName);
+  if (auth?.currentUser) {
+    console.log('Current user:', auth.currentUser);
+    console.log('Photo URL:', auth.currentUser.photoURL);
+    console.log('Display Name:', auth.currentUser.displayName);
+  }
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">

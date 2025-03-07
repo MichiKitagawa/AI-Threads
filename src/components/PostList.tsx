@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useState } from 'react';
 import { db } from '../lib/firebase';
 import { collection, query, orderBy, limit, onSnapshot, Timestamp } from 'firebase/firestore';
@@ -58,6 +60,13 @@ export default function PostList() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    // dbがundefinedの場合は早期リターン
+    if (!db) {
+      setError('データベース接続エラー');
+      setLoading(false);
+      return () => {};
+    }
+
     const postsQuery = query(
       collection(db, 'posts'),
       orderBy('createdAt', 'desc'),

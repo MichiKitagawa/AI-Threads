@@ -1,10 +1,13 @@
+'use client';
+
 import { useState, useEffect } from 'react';
 import { auth, db } from '../lib/firebase';
 import { collection, addDoc, serverTimestamp, doc, getDoc } from 'firebase/firestore';
 import { useAuthState } from 'react-firebase-hooks/auth';
 
 export default function AdminPostForm() {
-  const [user] = useAuthState(auth);
+  // authがundefinedの場合はnullを渡す
+  const [user] = useAuthState(auth as any);
   const [content, setContent] = useState('');
   const isPinned = true;
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -15,7 +18,7 @@ export default function AdminPostForm() {
   // Firestoreから管理者情報を取得
   useEffect(() => {
     async function checkAdminStatus() {
-      if (!user) {
+      if (!user || !db) {
         setIsAdmin(false);
         setLoading(false);
         return;
@@ -53,6 +56,11 @@ export default function AdminPostForm() {
     
     if (!content.trim()) {
       setError('投稿内容を入力してください');
+      return;
+    }
+    
+    if (!db) {
+      setError('データベース接続エラー');
       return;
     }
     

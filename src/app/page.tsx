@@ -2,20 +2,22 @@
 
 import { useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import Link from 'next/link';
 import { auth, db } from '../lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import PostForm from '../components/PostForm';
 import PostList from '../components/PostList';
+import { Auth } from 'firebase/auth';
 
 export default function Home() {
-  const [user] = useAuthState(auth);
+  const [user] = useAuthState(auth as Auth);
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     async function checkAdminStatus() {
-      if (!user) {
+      if (!user || !db) {
         setIsAdmin(false);
         return;
       }
@@ -31,7 +33,7 @@ export default function Home() {
     }
 
     checkAdminStatus();
-  }, [user]);
+  }, [user, db]);
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
@@ -43,12 +45,12 @@ export default function Home() {
         {isAdmin && (
           <div className="max-w-3xl mx-auto mb-4">
             <div className="bg-red-100 p-4 rounded-lg text-center">
-              <a 
+              <Link 
                 href="/admin" 
                 className="text-red-600 font-medium hover:underline"
               >
                 管理者ページへ（固定投稿の作成）
-              </a>
+              </Link>
             </div>
           </div>
         )}

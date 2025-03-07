@@ -9,16 +9,18 @@ import { doc, getDoc } from 'firebase/firestore';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import AdminPostForm from '../../components/AdminPostForm';
+import { Auth } from 'firebase/auth';
 
 export default function AdminPage() {
-  const [user, loading] = useAuthState(auth);
+  // 型アサーションを使用して、authがundefinedの場合でもAuth型として扱う
+  const [user, loading] = useAuthState(auth as Auth);
   const router = useRouter();
   const [isAdmin, setIsAdmin] = useState(false);
   const [isCheckingAdmin, setIsCheckingAdmin] = useState(true);
 
   useEffect(() => {
     async function checkAdminStatus() {
-      if (!user) {
+      if (!user || !db) {
         setIsAdmin(false);
         setIsCheckingAdmin(false);
         return;
@@ -39,7 +41,7 @@ export default function AdminPage() {
     if (!loading) {
       checkAdminStatus();
     }
-  }, [user, loading, router]);
+  }, [user, loading, router, db]);
 
   useEffect(() => {
     if (!loading && !isCheckingAdmin && !isAdmin) {
